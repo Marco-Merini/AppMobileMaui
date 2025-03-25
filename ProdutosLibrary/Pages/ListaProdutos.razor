@@ -2,24 +2,42 @@
 
 <h3>Produtos</h3>
 
+<div class="row mb-3">
+    <div class="col-md-4">
+        <div class="input-group">
+            <input class="form-control" placeholder="Pesquisar por Código e Descrição"
+                   @bind-value="searchTerm"
+                   @bind-value:event="oninput" />
+            <button class="btn btn-outline-secondary" @onclick="LimparPesquisa">
+                <i class="oi oi-x"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-4 mb-3">
-        <input class="form-control" placeholder="Codigo_Produto" @bind="model!.Codigo_Produto" />
+        <input class="form-control" placeholder="Codigo_Produto" @bind="model.Codigo_Produto" disabled />
     </div>
     <div class="col-md-4 mb-3">
-        <input class="form-control" placeholder="Descricao" @bind="model!.Descricao" />
+        <input class="form-control" placeholder="Descricao" @bind="model.Descricao" />
     </div>
     <div class="col-md-4 mb-3">
-        <input class="form-control" placeholder="Valor_Unitario" @bind="model!.Valor_Unitario" />
+        <input class="form-control" placeholder="Valor_Unitario" @bind="model.Valor_Unitario" type="number" step="0.01" />
     </div>
     <div class="col-md-4 mb-3">
-        <input class="form-control" placeholder="Quantidade" @bind="model!.Quantidade" />
+        <div class="input-group">
+            <button class="btn btn-secondary" @onclick="DiminuirQuantidade">-</button>
+            <input class="form-control" placeholder="Quantidade" @bind="model.Quantidade" type="number" />
+            <button class="btn btn-secondary" @onclick="AumentarQuantidade">+</button>
+        </div>
     </div>
     <div class="col-md-4 mb-3">
-        <input class="form-control" placeholder="Valor_Total" @bind="model!.Valor_Total" />
+        <input class="form-control" placeholder="Valor_Total" @bind="model.Valor_Total" disabled />
     </div>
-    <div class="col-md-4 mb-3">
-        <button class="btn btn-primary" @onclick="AddProduto">Incluir Produto</button>
+    <div class="col-md-4 mb-3 d-flex">
+        <button class="btn btn-primary me-2" @onclick="AddProduto">Incluir</button>
+        <button class="btn btn-warning me-2" @onclick="AtualizarProduto">Atualizar</button>
     </div>
 </div>
 
@@ -34,26 +52,22 @@
                         <th>Valor_Unitario</th>
                         <th>Quantidade</th>
                         <th>Valor_Total</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (produtos?.Any() ?? false)
-                    {
-                        @foreach (var produto in produtos)
-                        {
-                            <tr>
-                                <td>@produto.Codigo_Produto</td>
-                                <td>@produto.Descricao</td>
-                                <td>@produto.Valor_Unitario</td>
-                                <td>@produto.Quantidade</td>
-                                <td>@produto.Valor_Total</td>
-                            </tr>
-                        }
-                    }
-                    else
+                    @foreach (var produto in ProdutosFiltrados)
                     {
                         <tr>
-                            <td class="text-center" colspan="2">Não existem produtos</td>
+                            <td>@produto.Codigo_Produto</td>
+                            <td>@produto.Descricao</td>
+                            <td>@produto.Valor_Unitario</td>
+                            <td>@produto.Quantidade</td>
+                            <td>@produto.Valor_Total</td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-1" @onclick="() => SelecionarProduto(produto)">Editar</button>
+                                <button class="btn btn-sm btn-danger" @onclick="() => ExcluirProduto(produto)">Excluir</button>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -63,18 +77,107 @@
 </div>
 
 @code {
-
     private List<Produto>? produtos = new();
-    private Produto? model = new();
+    private Produto model = new();
+    private string searchTerm = string.Empty;
+    private Produto? produtoSelecionado;
 
     protected override async Task OnInitializedAsync()
     {
         produtos = await produtoService.LoadProdutosAsync();
     }
 
+    private void LimparPesquisa()
+    {
+        searchTerm = string.Empty;
+    }
+
     private void AddProduto()
     {
-        produtos!.Add(model!);
-        model = new();
+        if (string.IsNullOrWhiteSpace(model.Descricao) ||
+            string.IsNullOrWhiteSpace(model.Valor_Unitario) ||
+            string.IsNullOrWhiteSpace(model.Quantidade))
+            return;
+
+        model.Codigo_Produto = GerarCodigoProduto();
+        CalcularValorTotal();
+        produtos!.Add(model);
+        LimparModelo();
     }
+
+    private void AtualizarProduto()
+    {
+        if (produtoSelecionado == null) return;
+
+        var index = produtos!.IndexOf(produtoSelecionado);
+        if (index != -1)
+        {
+            CalcularValorTotal();
+            produtos[index] = model;
+            LimparModelo();
+            produtoSelecionado = null;
+        }
+    }
+
+    private void ExcluirProduto(Produto produto)
+    {
+        produtos!.Remove(produto);
+    }
+
+    private void SelecionarProduto(Produto produto)
+    {
+        produtoSelecionado = produto;
+        model = new Produto
+            {
+                Codigo_Produto = produto.Codigo_Produto,
+                Descricao = produto.Descricao,
+                Valor_Unitario = produto.Valor_Unitario,
+                Quantidade = produto.Quantidade,
+                Valor_Total = produto.Valor_Total
+            };
+    }
+
+    private void CalcularValorTotal()
+    {
+        if (decimal.TryParse(model.Valor_Unitario, out decimal valorUnitario) &&
+            int.TryParse(model.Quantidade, out int quantidade))
+        {
+            model.Valor_Total = (valorUnitario * quantidade).ToString("0.00");
+        }
+    }
+
+    private void DiminuirQuantidade()
+    {
+        if (int.TryParse(model.Quantidade, out int quantidade) && quantidade > 0)
+        {
+            model.Quantidade = (quantidade - 1).ToString();
+            CalcularValorTotal();
+        }
+    }
+
+    private void AumentarQuantidade()
+    {
+        if (int.TryParse(model.Quantidade, out int quantidade))
+        {
+            model.Quantidade = (quantidade + 1).ToString();
+            CalcularValorTotal();
+        }
+    }
+
+    private void LimparModelo()
+    {
+        model = new Produto();
+    }
+
+    private string GerarCodigoProduto()
+    {
+        var random = new Random();
+        return $"PROD-{random.Next(1000, 9999)}";
+    }
+
+    private IEnumerable<Produto> ProdutosFiltrados =>
+        produtos!.Where(p =>
+            string.IsNullOrEmpty(searchTerm) ||
+            p.Codigo_Produto!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            p.Descricao!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
 }

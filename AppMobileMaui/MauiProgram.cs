@@ -24,7 +24,9 @@ namespace AppMobileMaui
 #endif
             builder.Services.AddTransient<IProdutosService, ProdutoService>();
             builder.Services.AddTransient<IPedidosService, PedidoService>();
+
             return builder.Build();
         }
+
     }
 }

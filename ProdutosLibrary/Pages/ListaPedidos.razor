@@ -1,10 +1,19 @@
 ﻿@page "/pedidos"
+@using System.Text.RegularExpressions
 
 <h3>Pedidos</h3>
 
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input class="form-control" placeholder="Pesquisar por Número ou Nome"
+               @bind-value="searchTerm"
+               @bind-value:event="oninput" />
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-4 mb-3">
-        <input class="form-control" placeholder="Numero_Pedido" @bind="model!.Numero_Pedido" />
+        <input class="form-control" placeholder="Numero_Pedido" @bind="model!.Numero_Pedido" disabled />
     </div>
     <div class="col-md-4 mb-3">
         <input class="form-control" placeholder="Nome_Cliente" @bind="model!.Nome_Cliente" />
@@ -13,7 +22,7 @@
         <input class="form-control" placeholder="Data_Pedido" @bind="model!.Data_Pedido" />
     </div>
     <div class="col-md-4 mb-3">
-        <button class="btn btn-primary" @onclick="AddPedido">Buscar Pedido</button>
+        <button class="btn btn-primary" @onclick="AddPedido">Incluir Pedido</button>
     </div>
 </div>
 
@@ -26,24 +35,19 @@
                         <th>Numero_Pedido</th>
                         <th>Nome_Cliente</th>
                         <th>Data_Pedido</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (pedidos?.Any() ?? false)
-                    {
-                        @foreach (var pedido in pedidos)
-                        {
-                            <tr>
-                                <td>@pedido.Numero_Pedido</td>
-                                <td>@pedido.Nome_Cliente</td>
-                                <td>@pedido.Data_Pedido</td>
-                            </tr>
-                        }
-                    }
-                    else
+                    @foreach (var pedido in PedidosFiltrados)
                     {
                         <tr>
-                            <td class="text-center" colspan="2">Não existem pedidos</td>
+                            <td>@pedido.Numero_Pedido</td>
+                            <td>@pedido.Nome_Cliente</td>
+                            <td>@pedido.Data_Pedido</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" @onclick="() => ExcluirPedido(pedido)">Excluir</button>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -53,9 +57,9 @@
 </div>
 
 @code {
-
     private List<Pedido>? pedidos = new();
     private Pedido? model = new();
+    private string searchTerm = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,7 +68,29 @@
 
     private void AddPedido()
     {
-        pedidos!.Add(model!);
+        if (string.IsNullOrWhiteSpace(model!.Nome_Cliente) ||
+            string.IsNullOrWhiteSpace(model.Data_Pedido))
+            return;
+
+        model.Numero_Pedido = GerarNumeroPedido();
+        pedidos!.Add(model);
         model = new();
     }
+
+    private void ExcluirPedido(Pedido pedido)
+    {
+        pedidos!.Remove(pedido);
+    }
+
+    private string GerarNumeroPedido()
+    {
+        var random = new Random();
+        return $"PED-{random.Next(10000, 99999)}";
+    }
+
+    private IEnumerable<Pedido> PedidosFiltrados =>
+        pedidos!.Where(p =>
+            string.IsNullOrEmpty(searchTerm) ||
+            p.Numero_Pedido!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            p.Nome_Cliente!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
 }
