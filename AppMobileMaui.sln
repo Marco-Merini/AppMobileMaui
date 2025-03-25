@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppMobileMaui", "AppMobileMaui\AppMobileMaui.csproj", "{07E9DB0F-711B-49BC-AE26-3E8AC8638094}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProdutosLibrary", "ProdutosLibrary\ProdutosLibrary.csproj", "{DDFFCC57-544D-4913-9EDD-2AEF6DDA388D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07E9DB0F-711B-49BC-AE26-3E8AC8638094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E9DB0F-711B-49BC-AE26-3E8AC8638094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E9DB0F-711B-49BC-AE26-3E8AC8638094}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{07E9DB0F-711B-49BC-AE26-3E8AC8638094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E9DB0F-711B-49BC-AE26-3E8AC8638094}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E9DB0F-711B-49BC-AE26-3E8AC8638094}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DDFFCC57-544D-4913-9EDD-2AEF6DDA388D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDFFCC57-544D-4913-9EDD-2AEF6DDA388D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDFFCC57-544D-4913-9EDD-2AEF6DDA388D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDFFCC57-544D-4913-9EDD-2AEF6DDA388D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F2DD7AE-A3CB-415A-ABA8-532807EB9E29}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,80 @@
+﻿@page "/produtos"
+
+<h3>Produtos</h3>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Codigo_Produto" @bind="model!.Codigo_Produto" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Descricao" @bind="model!.Descricao" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Valor_Unitario" @bind="model!.Valor_Unitario" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Quantidade" @bind="model!.Quantidade" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Valor_Total" @bind="model!.Valor_Total" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <button class="btn btn-primary" @onclick="AddProduto">Incluir Produto</button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Codigo_Produto</th>
+                        <th>Descricao</th>
+                        <th>Valor_Unitario</th>
+                        <th>Quantidade</th>
+                        <th>Valor_Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (produtos?.Any() ?? false)
+                    {
+                        @foreach (var produto in produtos)
+                        {
+                            <tr>
+                                <td>@produto.Codigo_Produto</td>
+                                <td>@produto.Descricao</td>
+                                <td>@produto.Valor_Unitario</td>
+                                <td>@produto.Quantidade</td>
+                                <td>@produto.Valor_Total</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-center" colspan="2">Não existem produtos</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<Produto>? produtos = new();
+    private Produto? model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await produtoService.LoadProdutosAsync();
+    }
+
+    private void AddProduto()
+    {
+        produtos!.Add(model!);
+        model = new();
+    }
+}

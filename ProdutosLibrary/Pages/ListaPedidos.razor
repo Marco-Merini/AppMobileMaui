@@ -1,0 +1,70 @@
+﻿@page "/pedidos"
+
+<h3>Pedidos</h3>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Numero_Pedido" @bind="model!.Numero_Pedido" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Nome_Cliente" @bind="model!.Nome_Cliente" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <input class="form-control" placeholder="Data_Pedido" @bind="model!.Data_Pedido" />
+    </div>
+    <div class="col-md-4 mb-3">
+        <button class="btn btn-primary" @onclick="AddPedido">Buscar Pedido</button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Numero_Pedido</th>
+                        <th>Nome_Cliente</th>
+                        <th>Data_Pedido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (pedidos?.Any() ?? false)
+                    {
+                        @foreach (var pedido in pedidos)
+                        {
+                            <tr>
+                                <td>@pedido.Numero_Pedido</td>
+                                <td>@pedido.Nome_Cliente</td>
+                                <td>@pedido.Data_Pedido</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-center" colspan="2">Não existem pedidos</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<Pedido>? pedidos = new();
+    private Pedido? model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        pedidos = await pedidoService.LoadPedidosAsync();
+    }
+
+    private void AddPedido()
+    {
+        pedidos!.Add(model!);
+        model = new();
+    }
+}
