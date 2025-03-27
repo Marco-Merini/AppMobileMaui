@@ -1,4 +1,6 @@
-﻿namespace AppMobileMaui
+﻿using Application = Microsoft.Maui.Controls.Application;
+
+namespace AppMobileMaui
 {
     public partial class App : Application
     {
@@ -6,7 +8,8 @@
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new MainPage());
+
         }
     }
 }

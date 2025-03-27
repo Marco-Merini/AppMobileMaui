@@ -1,6 +1,8 @@
 ﻿using AppMobileMaui.Data;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using ProdutosLibrary.Data;
+using ZXing.Net.Maui.Controls;
 
 namespace AppMobileMaui
 {
@@ -11,10 +13,12 @@ namespace AppMobileMaui
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+                })
+                .UseBarcodeReader();
 
             builder.Services.AddMauiBlazorWebView();
 
