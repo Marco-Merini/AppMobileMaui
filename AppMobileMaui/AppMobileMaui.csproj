@@ -71,4 +71,13 @@
       <ProjectReference Include="..\ProdutosLibrary\ProdutosLibrary.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <MauiXaml Update="AppShell.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="BarcodePage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+    </ItemGroup>
+
 </Project>

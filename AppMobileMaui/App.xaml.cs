@@ -1,4 +1,4 @@
-﻿using Application = Microsoft.Maui.Controls.Application;
+
 
 namespace AppMobileMaui
 {
@@ -9,7 +9,6 @@ namespace AppMobileMaui
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());
-
         }
     }
 }
