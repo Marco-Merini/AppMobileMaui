@@ -1,4 +1,6 @@
-﻿namespace AppMobileMaui
+
+
+namespace AppMobileMaui
 {
     public partial class App : Application
     {
