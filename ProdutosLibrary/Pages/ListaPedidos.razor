@@ -1,13 +1,22 @@
 ﻿@page "/pedidos"
 @using System.Text.RegularExpressions
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject IPedidosService pedidoService
 
 <h3>Pedidos</h3>
 
 <div class="row mb-3">
     <div class="col-md-4">
-        <input class="form-control" placeholder="Pesquisar por Número ou Nome"
-               @bind-value="searchTerm"
-               @bind-value:event="oninput" />
+        <div class="input-group">
+            <input class="form-control" placeholder="Pesquisar por Número ou Nome"
+                   @bind-value="searchTerm"
+                   @bind-value:event="oninput"
+                   id="searchInput" />
+            <button class="btn btn-secondary" @onclick="StartBarcodeScanner">
+                <i class="fa fa-barcode"></i> Escanear
+            </button>
+        </div>
     </div>
 </div>
 
@@ -64,6 +73,23 @@
     protected override async Task OnInitializedAsync()
     {
         pedidos = await pedidoService.LoadPedidosAsync();
+    }
+
+    private async Task StartBarcodeScanner()
+    {
+        try
+        {
+            var result = await JSRuntime.InvokeAsync<string>("startBarcodeScanner");
+            if (!string.IsNullOrEmpty(result))
+            {
+                searchTerm = result;
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao escanear código de barras: {ex.Message}");
+        }
     }
 
     private void AddPedido()

@@ -1,6 +1,7 @@
 ﻿using AppMobileMaui.Data;
 using Microsoft.Extensions.Logging;
 using ProdutosLibrary.Data;
+using ZXing.Net.Maui.Controls;
 
 namespace AppMobileMaui
 {
