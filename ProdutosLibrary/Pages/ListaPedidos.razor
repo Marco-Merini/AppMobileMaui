@@ -89,7 +89,7 @@
     private string GerarNumeroPedido()
     {
         var random = new Random();
-        return $"PED-{random.Next(10000, 99999)}";
+        return $"{random.NextInt64(1000000000, 9999999999)}";
     }
 
     private IEnumerable<Pedido> PedidosFiltrados =>
