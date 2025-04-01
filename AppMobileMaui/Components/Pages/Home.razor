@@ -1,5 +1,98 @@
 ﻿@page "/"
+@inject NavigationManager navigationManager
 
-<h1>Hello, world!</h1>
+<div class="login-container">
+    <h2>Bem-vindo!</h2>
+    <p>Faça login para continuar</p>
 
-Welcome to your new app.
+    <div class="input-group">
+        <label>Email</label>
+        <input @bind="Email" type="email" class="input-field" placeholder="Digite seu email" />
+    </div>
+
+    <div class="input-group">
+        <label>Senha</label>
+        <input @bind="Senha" type="password" class="input-field" placeholder="Digite sua senha" />
+    </div>
+
+    <button @onclick="RealizarLogin" class="login-button">Entrar</button>
+
+    @if (!string.IsNullOrEmpty(MensagemErro))
+    {
+            <p class="error-message">@MensagemErro</p>
+    }
+</div>
+
+<style>
+    .login-container {
+        width: 90%;
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .input-group label {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .login-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .login-button:hover {
+        background-color: #0056b3;
+    }
+
+    .error-message {
+        color: red;
+        margin-top: 10px;
+    }
+</style>
+
+@code {
+    private string Email { get; set; } = "";
+    private string Senha { get; set; } = "";
+    private string MensagemErro { get; set; } = "";
+
+    private void RealizarLogin()
+    {
+        if (Email == "admin@email.com" && Senha == "1234")
+        {
+            MensagemErro = "";
+            navigationManager.NavigateTo("/produtos");
+        }
+        else
+        {
+            MensagemErro = "Email ou senha incorretos!";
+        }
+    }
+}
