@@ -19,8 +19,8 @@ namespace AppMobileMaui
             builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+            builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Logging.AddDebug();
 #endif
             builder.Services.AddTransient<IProdutosService, ProdutoService>();
             builder.Services.AddTransient<IPedidosService, PedidoService>();
