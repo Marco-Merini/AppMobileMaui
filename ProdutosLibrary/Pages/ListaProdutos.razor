@@ -172,7 +172,7 @@
     private string GerarCodigoProduto()
     {
         var random = new Random();
-        return $"PROD-{random.Next(1000, 9999)}";
+        return $"{random.Next(10000, 99999)}";
     }
 
     private IEnumerable<Produto> ProdutosFiltrados =>
