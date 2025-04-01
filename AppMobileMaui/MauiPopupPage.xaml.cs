@@ -1,5 +1,4 @@
-﻿// MauiPopupPage.xaml.cs in AppMobileMaui/MauiPages
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using ZXing.Net.Maui;
 
 namespace MauiMixBlazorSample.MauiPages;
