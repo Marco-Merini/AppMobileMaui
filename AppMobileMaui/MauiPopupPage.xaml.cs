@@ -1,5 +1,6 @@
 ﻿// MauiPopupPage.xaml.cs in AppMobileMaui/MauiPages
 using CommunityToolkit.Maui.Views;
+using ZXing.Net.Maui;
 
 namespace MauiMixBlazorSample.MauiPages;
 
@@ -8,6 +9,13 @@ public partial class MauiPopupPage : Popup
     public MauiPopupPage()
     {
         InitializeComponent();
+
+        scanner.Options = new BarcodeReaderOptions
+        {
+            Formats = BarcodeFormats.All,
+            AutoRotate = true,
+            Multiple = true
+        };
     }
 
     private void scanner_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
