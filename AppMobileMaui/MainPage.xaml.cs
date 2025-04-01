@@ -1,10 +1,14 @@
-﻿namespace AppMobileMaui
+﻿namespace AppMobileMaui;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public MainPage()
     {
-        public MainPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
+
+private void Button_Clicked(object sender, EventArgs e)
+    {
+        Navigation.PopModalAsync();
     }
 }

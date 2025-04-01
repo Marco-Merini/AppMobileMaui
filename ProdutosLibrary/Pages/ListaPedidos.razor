@@ -1,13 +1,17 @@
 ﻿@page "/pedidos"
 @using System.Text.RegularExpressions
+@inject IScannerService ScannerService
 
 <h3>Pedidos</h3>
 
 <div class="row mb-3">
     <div class="col-md-4">
-        <input class="form-control" placeholder="Pesquisar por Número ou Nome"
-               @bind-value="searchTerm"
-               @bind-value:event="oninput" />
+        <div class="input-group">
+            <input class="form-control" placeholder="Pesquisar por Número ou Nome"
+            @bind-value="searchTerm"
+            @bind-value:event="oninput" />
+            <button class="btn btn-primary" @onclick="StartScan">Scan</button>
+        </div>
     </div>
 </div>
 
@@ -93,4 +97,14 @@
             string.IsNullOrEmpty(searchTerm) ||
             p.Numero_Pedido!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
             p.Nome_Cliente!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+
+    private async Task StartScan()
+    {
+        var result = await ScannerService.ScanAsync();
+        if (!string.IsNullOrEmpty(result))
+        {
+            searchTerm = result;
+            StateHasChanged();
+        }
+    }
 }
