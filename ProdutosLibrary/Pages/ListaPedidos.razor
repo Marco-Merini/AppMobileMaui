@@ -1,6 +1,7 @@
 ﻿@page "/pedidos"
 @using System.Text.RegularExpressions
 @inject IScannerService ScannerService
+@inject NavigationManager Navigation
 
 <h3>Pedidos</h3>
 
@@ -17,7 +18,8 @@
 
 <div class="row">
     <div class="col-md-4 mb-3">
-        <input class="form-control" placeholder="Numero_Pedido" @bind="model!.Numero_Pedido" disabled />
+        <input class="form-control" placeholder="Numero_Pedido" @bind="model!.Numero_Pedido" />
+        <button class="btn btn-primary" @onclick="StartScan">Scan</button>
     </div>
     <div class="col-md-4 mb-3">
         <input class="form-control" placeholder="Nome_Cliente" @bind="model!.Nome_Cliente" />
@@ -50,6 +52,7 @@
                             <td>@pedido.Nome_Cliente</td>
                             <td>@pedido.Data_Pedido</td>
                             <td>
+                                <button class="btn btn-sm btn-primary me-1" @onclick="() => IrParaProdutos(pedido.Numero_Pedido)">Selecionar</button>
                                 <button class="btn btn-sm btn-danger" @onclick="() => ExcluirPedido(pedido)">Excluir</button>
                             </td>
                         </tr>
@@ -107,4 +110,10 @@
             StateHasChanged();
         }
     }
+
+    private void IrParaProdutos(string numeroPedido)
+    {
+        Navigation.NavigateTo($"/produtos?pedido={numeroPedido}");
+    }
+
 }
